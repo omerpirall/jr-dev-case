@@ -1,26 +1,23 @@
-JR Dev Case – DLL Integration with Python Backend
-Overview
+# JR Dev Case – DLL Integration with Python Backend
+
+## Overview
 
 This project demonstrates how a .NET DLL can be integrated with a Python backend and accessed through a web interface using WebSockets.
 
 The system includes:
 
-A C# Class Library (DLL) exposing utility methods
+* A C# Class Library (DLL) exposing utility methods
+* A Python backend that loads the DLL using pythonnet
+* A WebSocket API to communicate with the frontend
+* A simple web UI to trigger DLL functions
+* Image conversion functionality (Base64 → Hex)
+* A Windows Service that supervises the backend process and restarts it if it crashes
 
-A Python backend that loads the DLL using pythonnet
-
-A WebSocket API to communicate with the frontend
-
-A simple web UI to trigger DLL functions
-
-Image conversion functionality (Base64 → Hex)
-
-A Windows Service that supervises the backend process and restarts it if it crashes
-
-Architecture
+## Architecture
 
 The system architecture is shown below:
 
+```text
 Frontend (HTML / JS)
         │
         │ WebSocket
@@ -30,11 +27,13 @@ Python Backend (FastAPI)
         │ pythonnet
         ▼
 C# DLL (CaseLib)
-
+```
 
 The frontend communicates with the backend via WebSockets, and the backend executes DLL methods.
 
-Project Structure
+## Project Structure
+
+```text
 JR-DEV-CASE
 │
 ├─ CaseLib
@@ -58,57 +57,62 @@ JR-DEV-CASE
 │   └─ jr-dev-service.xml
 │
 └─ README.md
+```
 
-DLL Functionality
+## DLL Functionality
 
 The .NET DLL provides the following methods:
 
-Method	Description
-GetMessage1	Returns a predefined message
-GetMessage2	Returns a predefined message
-GetMessage3	Returns a predefined message
-GetSystemTime	Returns current system time
-ConvertBase64ToHex	Converts Base64 image data into hexadecimal
+| Method             | Description                                 |
+| ------------------ | ------------------------------------------- |
+| GetMessage1        | Returns a predefined message                |
+| GetMessage2        | Returns a predefined message                |
+| GetMessage3        | Returns a predefined message                |
+| GetSystemTime      | Returns current system time                 |
+| ConvertBase64ToHex | Converts Base64 image data into hexadecimal |
 
 These methods are accessed from Python using pythonnet.
 
-Running the Backend
+## Running the Backend
 
 Navigate to the backend executable folder:
 
+```bash
 cd python-app/dist
-
+```
 
 Run the packaged backend:
 
+```bash
 server.exe
-
+```
 
 If successful, the terminal should display:
 
+```text
 Uvicorn running on http://127.0.0.1:8000
+```
 
-Accessing the Frontend
+## Accessing the Frontend
 
 Open a browser and navigate to:
 
+```text
 http://127.0.0.1:8000
-
+```
 
 The web interface should load and allow interaction with the backend.
 
-Testing the System
-1. Test DLL Messages
+## Testing the System
+
+### 1. Test DLL Messages
 
 Click the buttons:
 
-Get Message 1
-
-Get Message 2
-
-Get Message 3
-
-Get System Time
+* Get Message 1
+* Get Message 2
+* Get Message 3
+* Get System Time
 
 Expected result:
 
@@ -116,112 +120,96 @@ The frontend should display responses returned from the DLL.
 
 This confirms that the Python backend successfully loads and calls the DLL methods.
 
-2. Test Image Conversion
+### 2. Test Image Conversion
 
-Upload an image using the file input
-
-The frontend converts the image to Base64
-
-The backend sends the Base64 data to the DLL
-
-The DLL converts it to hexadecimal
-
-The hexadecimal result is returned and displayed
+1. Upload an image using the file input
+2. The frontend converts the image to Base64
+3. The backend sends the Base64 data to the DLL
+4. The DLL converts it to hexadecimal
+5. The hexadecimal result is returned and displayed
 
 This confirms the full pipeline:
 
+```text
 Frontend → WebSocket → Python → DLL → Python → Frontend
+```
 
-Windows Service Integration
+## Windows Service Integration
 
 The backend executable is supervised using WinSW (Windows Service Wrapper).
 
 This ensures that:
 
-The backend starts automatically
-
-The process restarts if it crashes
-
-The service runs independently of user sessions
+* The backend starts automatically
+* The process restarts if it crashes
+* The service runs independently of user sessions
 
 Install the service:
 
+```bash
 cd service
 jr-dev-service.exe install
-
+```
 
 Start the service:
 
+```bash
 jr-dev-service.exe start
-
+```
 
 Stop the service:
 
+```bash
 jr-dev-service.exe stop
-
+```
 
 Uninstall the service:
 
+```bash
 jr-dev-service.exe uninstall
+```
 
-Crash Recovery Test
+## Crash Recovery Test
 
 To verify the service restart mechanism:
 
-Start the service
-
-Open Task Manager
-
-Locate server.exe
-
-End the process manually
+1. Start the service
+2. Open Task Manager
+3. Locate `server.exe`
+4. End the process manually
 
 Expected behavior:
 
-Within a few seconds, the service automatically restarts server.exe.
+Within a few seconds, the service automatically restarts `server.exe`.
 
 This confirms that WinSW supervision is functioning correctly.
 
-Technologies Used
+## Technologies Used
 
-C# (.NET)
+* C# (.NET)
+* Python
+* FastAPI
+* pythonnet
+* WebSockets
+* HTML / JavaScript
+* PyInstaller
+* WinSW
 
-Python
+## Design Decisions
 
-FastAPI
+* pythonnet was used to bridge Python and the .NET DLL.
+* FastAPI was chosen for simplicity and WebSocket support.
+* WebSockets allow real-time communication between frontend and backend.
+* WinSW was used to supervise the backend process and automatically restart it if it crashes.
 
-pythonnet
-
-WebSockets
-
-HTML / JavaScript
-
-PyInstaller
-
-WinSW
-
-Design Decisions
-
-pythonnet was used to bridge Python and the .NET DLL.
-
-FastAPI was chosen for simplicity and WebSocket support.
-
-WebSockets allow real-time communication between frontend and backend.
-
-WinSW was used to supervise the backend process and automatically restart it if it crashes.
-
-Conclusion
+## Conclusion
 
 This project demonstrates a simple but complete pipeline integrating:
 
-.NET DLL functionality
-
-Python backend processing
-
-WebSocket communication
-
-Browser-based frontend
-
-Windows service supervision
+* .NET DLL functionality
+* Python backend processing
+* WebSocket communication
+* Browser-based frontend
+* Windows service supervision
 
 The system shows how cross-language integration can be implemented and managed reliably.
