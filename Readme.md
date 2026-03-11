@@ -1,45 +1,39 @@
-JR Dev Case – DLL, WebSocket, Service Integration
+JR Dev Case – DLL Integration with Python Backend
 Overview
 
-This project demonstrates integration between a .NET DLL, a Python backend, and a web frontend.
-The system exposes DLL functionality through a WebSocket API, provides a simple browser UI, and runs as a Windows Service with automatic restart and recovery.
+This project demonstrates how a .NET DLL can be integrated with a Python backend and accessed through a web interface using WebSockets.
 
-Key features:
+The system includes:
 
-C# class library exposing utility methods
+A C# Class Library (DLL) exposing utility methods
 
-Python backend loading the DLL using pythonnet
+A Python backend that loads the DLL using pythonnet
 
-WebSocket API for real-time communication
+A WebSocket API to communicate with the frontend
 
-Frontend interface interacting with backend
+A simple web UI to trigger DLL functions
 
-Image → Base64 → Hex conversion pipeline
+Image conversion functionality (Base64 → Hex)
 
-Python application packaged as a standalone .exe
-
-Windows Service supervision using WinSW
-
-Automatic restart if backend crashes
+A Windows Service that supervises the backend process and restarts it if it crashes
 
 Architecture
+
+The system architecture is shown below:
+
 Frontend (HTML / JS)
         │
         │ WebSocket
         ▼
-Python Backend (FastAPI + pythonnet)
+Python Backend (FastAPI)
         │
-        │ CLR bridge
+        │ pythonnet
         ▼
 C# DLL (CaseLib)
-Components
-Component	Technology
-Frontend	HTML, JavaScript
-Backend	Python, FastAPI
-Interop	pythonnet
-DLL	C# (.NET)
-Packaging	PyInstaller
-Service Supervision	WinSW
+
+
+The frontend communicates with the backend via WebSockets, and the backend executes DLL methods.
+
 Project Structure
 JR-DEV-CASE
 │
@@ -54,8 +48,8 @@ JR-DEV-CASE
 │   └─ style.css
 │
 ├─ python-app
-│   ├─ CaseLib.dll
 │   ├─ server.py
+│   ├─ CaseLib.dll
 │   └─ dist
 │       └─ server.exe
 │
@@ -64,123 +58,133 @@ JR-DEV-CASE
 │   └─ jr-dev-service.xml
 │
 └─ README.md
+
 DLL Functionality
 
-The .NET library exposes the following methods:
+The .NET DLL provides the following methods:
 
 Method	Description
-GetMessage1	Returns a static message
-GetMessage2	Returns a static message
-GetMessage3	Returns a static message
+GetMessage1	Returns a predefined message
+GetMessage2	Returns a predefined message
+GetMessage3	Returns a predefined message
 GetSystemTime	Returns current system time
-ConvertBase64ToHex	Converts Base64 image data to hexadecimal
+ConvertBase64ToHex	Converts Base64 image data into hexadecimal
 
-These methods are loaded from Python via pythonnet.
+These methods are accessed from Python using pythonnet.
 
-Python Backend
+Running the Backend
 
-The Python backend:
+Navigate to the backend executable folder:
 
-Loads the .NET DLL using pythonnet
+cd python-app/dist
 
-Exposes a WebSocket endpoint
 
-Serves the frontend UI
+Run the packaged backend:
 
-Handles image conversion requests
+server.exe
 
-Example WebSocket endpoint:
 
-ws://127.0.0.1:8000/ws
+If successful, the terminal should display:
 
-The backend returns responses based on the DLL method invoked.
+Uvicorn running on http://127.0.0.1:8000
 
-Frontend
+Accessing the Frontend
 
-The frontend provides a simple interface allowing users to:
-
-Call DLL methods via WebSocket
-
-Retrieve system messages
-
-Display server responses
-
-Upload an image file
-
-Convert the image to Base64
-
-Send the Base64 data to the backend
-
-Receive and display hexadecimal output
-
-Packaging the Python Application
-
-The Python backend is packaged as a standalone executable using PyInstaller.
-
-Command used:
-
-pyinstaller --onefile --add-data "CaseLib.dll;." server.py
-
-Result:
-
-python-app/dist/server.exe
-
-This allows the backend to run on systems without requiring Python installation.
-
-Windows Service
-
-The packaged backend is supervised by WinSW (Windows Service Wrapper).
-
-The service configuration file:
-
-service/jr-dev-service.xml
-
-Service responsibilities:
-
-Start server.exe
-
-Automatically restart if the process crashes
-
-Run automatically on system startup
-
-Install service:
-
-jr-dev-service.exe install
-
-Start service:
-
-jr-dev-service.exe start
-
-Stop service:
-
-jr-dev-service.exe stop
-
-Uninstall service:
-
-jr-dev-service.exe uninstall
-Crash Recovery
-
-The service is configured with restart policies:
-
-<onfailure action="restart" delay="5 sec"/>
-<onfailure action="restart" delay="10 sec"/>
-<onfailure action="restart" delay="20 sec"/>
-
-If server.exe terminates unexpectedly, the service automatically restarts the backend.
-
-This ensures continuous availability of the system.
-
-Running the System
-
-After the service starts, the application can be accessed via:
+Open a browser and navigate to:
 
 http://127.0.0.1:8000
 
-The frontend UI connects to the backend WebSocket and interacts with the DLL.
+
+The web interface should load and allow interaction with the backend.
+
+Testing the System
+1. Test DLL Messages
+
+Click the buttons:
+
+Get Message 1
+
+Get Message 2
+
+Get Message 3
+
+Get System Time
+
+Expected result:
+
+The frontend should display responses returned from the DLL.
+
+This confirms that the Python backend successfully loads and calls the DLL methods.
+
+2. Test Image Conversion
+
+Upload an image using the file input
+
+The frontend converts the image to Base64
+
+The backend sends the Base64 data to the DLL
+
+The DLL converts it to hexadecimal
+
+The hexadecimal result is returned and displayed
+
+This confirms the full pipeline:
+
+Frontend → WebSocket → Python → DLL → Python → Frontend
+
+Windows Service Integration
+
+The backend executable is supervised using WinSW (Windows Service Wrapper).
+
+This ensures that:
+
+The backend starts automatically
+
+The process restarts if it crashes
+
+The service runs independently of user sessions
+
+Install the service:
+
+cd service
+jr-dev-service.exe install
+
+
+Start the service:
+
+jr-dev-service.exe start
+
+
+Stop the service:
+
+jr-dev-service.exe stop
+
+
+Uninstall the service:
+
+jr-dev-service.exe uninstall
+
+Crash Recovery Test
+
+To verify the service restart mechanism:
+
+Start the service
+
+Open Task Manager
+
+Locate server.exe
+
+End the process manually
+
+Expected behavior:
+
+Within a few seconds, the service automatically restarts server.exe.
+
+This confirms that WinSW supervision is functioning correctly.
 
 Technologies Used
 
-.NET (C#)
+C# (.NET)
 
 Python
 
@@ -196,14 +200,28 @@ PyInstaller
 
 WinSW
 
-Notes
+Design Decisions
 
-The backend process is supervised by a Windows Service to ensure reliability.
+pythonnet was used to bridge Python and the .NET DLL.
 
-Frontend communication uses WebSocket for real-time interaction.
+FastAPI was chosen for simplicity and WebSocket support.
 
-The system demonstrates cross-language interoperability between .NET and Python.
+WebSockets allow real-time communication between frontend and backend.
 
-Author
+WinSW was used to supervise the backend process and automatically restart it if it crashes.
 
-JR Dev Case Implementation
+Conclusion
+
+This project demonstrates a simple but complete pipeline integrating:
+
+.NET DLL functionality
+
+Python backend processing
+
+WebSocket communication
+
+Browser-based frontend
+
+Windows service supervision
+
+The system shows how cross-language integration can be implemented and managed reliably.
