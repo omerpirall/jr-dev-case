@@ -1,0 +1,21 @@
+# Python virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Log files
+*.log
+
+# C# build artifacts
+CaseLib/bin/
+CaseLib/obj/
+
+# Python build artifacts
+python-app/build/
+python-app/__pycache__/
+
+# Service logs
+service/logs/
+service/*.log

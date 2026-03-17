@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JR Developer Case</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>DLL WebSocket Client</h1>
+
+    <div class="buttons">
+      <button onclick="sendRequest('message1')">Get Message 1</button>
+      <button onclick="sendRequest('message2')">Get Message 2</button>
+      <button onclick="sendRequest('message3')">Get Message 3</button>
+      <button onclick="sendRequest('time')">Get System Time</button>
+    </div>
+
+    <div class="upload-section">
+      <h2>Image to Hex</h2>
+      <input type="file" id="imageInput" accept="image/*" />
+      <button onclick="sendImage()">Convert Image</button>
+    </div>
+
+    <div id="status" class="status">Ready</div>
+    <pre id="result" class="result"></pre>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
