@@ -1,0 +1,120 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/popup.css" />
+	<script type="text/javascript" src="scripts/popup.build.min.js"></script>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+	<div class="container-fluid h-100" id="main-container">
+		<div class="row p-2 mt-1 mb-1 sticky-top bg-light">
+			<div class="footer-bg"></div>
+            <br />
+			<div class="col-6">
+				<h4 id="popup-header-title" msg="popup_msg_header_title"></h4>
+			</div>
+			<div class="col-6">
+				<div class="float-end">
+					<a href="https://fdown.net/ext/help.php" class="btn btn-outline-info btn-sm" title="How to use Video Downloader PLUS?" target="_blank" >
+						Help
+					</a>
+					<a href="#" id="clear-list-action" class="btn btn-outline-primary btn-sm" title="Clear Video List">
+						Clear
+					</a>
+				</div>
+			</div>
+		</div>
+		<div id="popup-content">
+			<div>
+				<div id="media-list-container"></div>
+			</div>
+
+			<div class="alert alert-success mt-5 text-center d-none" id="no_media_detected_alert" role="alert">
+				<h4 class="alert-heading" msg="popup_msg_no_video_detected_title"></h4>
+				<p msg="popup_msg_nomedia_detected"></p>
+			</div>
+
+			<div class="alert alert-warning mt-5 text-center d-none" id="no_download_alert" role="alert">
+				<h4 class="alert-heading" msg="popup_msg_no_download_title"></h4>
+				<p msg="popup_msg_no_download_1"></p>
+				<p msg="popup_msg_no_download_2"></p>
+			</div>
+			
+			<div class="alert alert-danger mt-5 text-center d-none" id="unsupported_platform" role="alert">
+				<h4 class="alert-heading" msg="popup_msg_unsupported_platform_title"></h4>
+				<p msg="popup_msg_unsupported_platform_1"></p>
+				<p msg="popup_msg_unsupported_platform_2"></p>
+				<p msg="popup_msg_unsupported_platform_3"></p>
+			</div>
+			<!-- disclaimer -->
+            <div class="d-none" id="disclaimer_message" style="font-size:15px">
+                <div class="col-8 offset-2">
+                    <div class="alert alert-info" id="disclaimer_content" role="alert">
+                        <div class="text-center">
+                            <h3 class="alert-heading text-body fw-bold h6" msg="popup_msg_disclaimer_title"></h3>
+                            <img src="assets/images/privacy.png" style="width:12%">
+                        </div>
+                        <p msg="popup_msg_disclaimer_1"></p>
+                        <p msg="popup_msg_disclaimer_2"></p>
+                        <p msg="popup_msg_disclaimer_5" class="d-inline"></p>
+                        <a href="https://fdown.net/privacy.php" target="_blank" class="">Privacy Policy</a>
+                        <hr>
+                    </div>
+                </div>
+                <div class="col-10 offset-1 sticky-bottom" style="bottom:30px;box-shadow: 0 -.3rem .4rem rgba(0,0,0,0.1)!important;">
+                    <div class="alert alert-light text-center">
+                        <a href="https://fdown.net/privacy.php" target="_blank" class="btn btn-secondary text-light" msg="popup_msg_learn_more"></a>
+                        <button id="dismiss-disclaimer-agree" class="btn btn-primary" msg="popup_msg_agree"></button>
+                        <button id="dismiss-disclaimer-customize" class="btn btn-secondary" msg="popup_msg_customize"></button>
+                    </div>
+                </div>
+            </div>
+            <div id="customize_screen" class="d-none">
+                <div class="col-8 offset-2">
+                    <div class="alert alert-info" id="customize_content" role="alert">
+                        <h3 class="alert-heading text-body fw-bold h6 text-center" msg="popup_msg_customize_screen_title"></h3>
+                        <p msg="popup_msg_customize_screen_1"></p>
+                        <p msg="popup_msg_customize_screen_2"></p>
+                        <div style="margin-bottom: 10px;">
+                            <button class="collapsible">Browsing activity</button>
+                            <div class="content">
+                                <div style="color:#000; margin-top:10px; margin-bottom:10px; float:left; width:70%;">
+                                    Toggle to share your visited URLs & history with us. This data wont be shared with any other party.
+                                </div>
+                                <div style="color:#000; margin-top:10px; margin-bottom:10px; float:left; width:30%;">
+                                    <label class="switch" style="float:right; margin-bottom:10px;">
+                                        <input id="URLs" name="URLs" type="checkbox" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-10 offset-1 sticky-bottom" style="bottom:30px;">
+                    <div class="alert alert-light text-center">
+                        <button id="dismiss-disclaimer-confirm" class="btn btn-secondary" msg="popup_msg_customize_confirm"></button>
+                        <button id="dismiss-disclaimer-accept" class="btn btn-primary" msg="popup_msg_customize_accept"></button>
+                    </div>
+                </div>
+            </div>
+            
+		</div>
+	</div>
+
+	<footer class="bg-light">
+		<span style="color:grey">V6.5.5 (REV)</span>
+		<div class="disclaimer-reminder" style="font-size:9px;">
+			<a href="https://fdown.net/privacy.php" target="_blank">Privacy Policy</a>
+			-
+			<a href="https://fdown.net/terms.php" target="_blank">Terms of Use</a>
+			-
+			<a href="https://fdown.net/disclaimer.php" target="_blank">Disclaimer</a>
+		</div>
+		<div id="videoplatformdetect-wrapper" class="">
+			<div id="videoplatformdetect-info" class="bg-secondary">...</div>
+		</div>
+	</footer>
+</body>
+</html>

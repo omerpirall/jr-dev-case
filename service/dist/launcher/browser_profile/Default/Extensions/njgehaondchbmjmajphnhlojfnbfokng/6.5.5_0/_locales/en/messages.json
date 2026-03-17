@@ -1,0 +1,98 @@
+{
+   "extension_description": {
+      "message": "Best Video Downloader Extension. Downloads most popular media types from any website."
+   },
+   "extension_title": {
+      "message": "Video Downloader PLUS"
+   },
+   "popup_msg_agree": {
+      "message": "Agree & continue"
+   },
+   "popup_msg_customize": {
+      "message": "Customize"
+   },
+   "popup_msg_customize_accept": {
+      "message": "Accept all & agree"
+   },
+   "popup_msg_customize_confirm": {
+      "message": "Confirm my choices"
+   },
+   "popup_msg_customize_screen_1": {
+      "message": "By selecting the 'Agree' option, you consent to the sharing of your browsing data in a manner that is aggregated and anonymized. This anonymized data will not be shared with any 3rd parties and is used solely to enhance our services."
+   },
+   "popup_msg_customize_screen_2": {
+      "message": "Manage Consent Preferences"
+   },
+   "popup_msg_customize_screen_title": {
+      "message": "Consent Preference Center"
+   },
+   "popup_msg_disclaimer_1": {
+      "message": "To enable us to provide you with our video downloading services, we collect anonymous data including URLs and browsing history."
+   },
+   "popup_msg_disclaimer_2": {
+      "message": "With your consent, we may collect data on the websites you visit in an anonymous manner. This information is solely used to provide you with our services and will not be shared with any third parties."
+   },
+   "popup_msg_disclaimer_2_1": {
+      "message": "search engine results page"
+   },
+   "popup_msg_disclaimer_2_2": {
+      "message": "web pages visited"
+   },
+   "popup_msg_disclaimer_2_3": {
+      "message": "browsing history"
+   },
+   "popup_msg_disclaimer_3": {
+      "message": "This data won't be shared with any 3rd parties and is used solely to enhance our services."
+   },
+   "popup_msg_disclaimer_4": {
+      "message": "This data won't be shared with any 3rd parties and is used solely to enhance our services."
+   },
+   "popup_msg_disclaimer_5": {
+      "message": "We want to emphasize that we do not seek to obtain your identity, preferences, or any personally identifiable information from you. This commitment is outlined with more details in our "
+   },
+   "popup_msg_disclaimer_title": {
+      "message": "Want to use Video Downloader PLUS?"
+   },
+   "popup_msg_header_title": {
+      "message": "Videos List:"
+   },
+   "popup_msg_learn_more": {
+      "message": "Learn more"
+   },
+   "popup_msg_no_download_1": {
+      "message": "You need to wait until video completely preloads, then start to download."
+   },
+   "popup_msg_no_download_2": {
+      "message": "Otherwise, you will download only pre-loaded part."
+   },
+   "popup_msg_no_download_title": {
+      "message": "Note to this video!"
+   },
+   "popup_msg_no_video_detected_title": {
+      "message": "No video detected"
+   },
+   "popup_msg_nomedia_detected": {
+      "message": "To get started, try playing the video first. If that doesn't work, reload the page. If a video is still not detected, please contact us for additional help."
+   },
+   "popup_msg_unsupported_platform_1": {
+      "message": "Due to YouTube Policy. It isn't allowed to download from YouTube."
+   },
+   "popup_msg_unsupported_platform_2": {
+      "message": "Please, do not post negative reviews. This is not our fault."
+   },
+   "popup_msg_unsupported_platform_3": {
+      "message": "Hope you understand that. Thanks!"
+   },
+   "popup_msg_unsupported_platform_4": {
+      "message": "This video platform is not supported. We apologize for any inconvenience this may cause."
+   },
+   "popup_msg_unsupported_platform_5": {
+      "message": "Please try a different video platform. Thank you for your understanding"
+   },
+   "popup_msg_unsupported_platform_title": {
+      "message": "Unsupported video platform"
+   },
+   "popup_msg_video_platform_detect": {
+      "message": "Video Detection:"
+   }
+}

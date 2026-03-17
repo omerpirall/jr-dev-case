@@ -3,6 +3,7 @@ import time
 import os
 import sys
 import signal
+import socket
 from pathlib import Path
 
 APP_URL = "http://127.0.0.1:8000"
@@ -25,8 +26,9 @@ else:
     BASE_DIR = Path(__file__).resolve().parent
 
 PID_FILE = BASE_DIR / "launcher.pid"
+BROWSER_PROFILE_DIR = BASE_DIR / "browser_profile"
+PROFILE_MARKER = "browser_profile"
 
-browser_process = None
 running = True
 last_browser_launch_time = 0.0
 
@@ -42,6 +44,14 @@ def remove_pid():
         pass
 
 
+def is_server_up(host="127.0.0.1", port=8000, timeout=1):
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except Exception:
+        return False
+
+
 def find_browser_exe():
     for path in EDGE_PATHS + CHROME_PATHS:
         if os.path.exists(path):
@@ -50,14 +60,77 @@ def find_browser_exe():
 
 
 def browser_launch_allowed():
-    global last_browser_launch_time
     return (time.time() - last_browser_launch_time) >= BROWSER_REOPEN_COOLDOWN
 
 
+def build_browser_args(browser_exe: str):
+    browser_name = os.path.basename(browser_exe).lower()
+    profile_arg = f"--user-data-dir={BROWSER_PROFILE_DIR}"
+
+    if "msedge.exe" in browser_name:
+        return [
+            browser_exe,
+            "--inprivate",
+            profile_arg,
+            "--new-window",
+            APP_URL,
+        ]
+
+    return [
+        browser_exe,
+        "--incognito",
+        profile_arg,
+        "--new-window",
+        APP_URL,
+    ]
+
+
+def is_target_browser_running():
+    """
+    Sadece bizim launcher'ın açtığı browser instance'ını arar.
+    Arama kriteri:
+    - process adı msedge.exe veya chrome.exe
+    - command line içinde browser_profile geçiyor
+    """
+    ps_script = rf"""
+$marker = "{PROFILE_MARKER}"
+$procs = Get-CimInstance Win32_Process | Where-Object {{
+    ($_.Name -eq 'msedge.exe' -or $_.Name -eq 'chrome.exe') -and
+    $_.CommandLine -ne $null -and
+    $_.CommandLine -like "*$marker*"
+}}
+if ($procs.Count -gt 0) {{
+    Write-Output "FOUND"
+}} else {{
+    Write-Output "NOT_FOUND"
+}}
+"""
+    try:
+        result = subprocess.run(
+            [
+                "powershell",
+                "-NoProfile",
+                "-ExecutionPolicy", "Bypass",
+                "-Command", ps_script
+            ],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        output = (result.stdout or "").strip()
+        print(f"[DEBUG] browser detection output={output}")
+        return output == "FOUND"
+    except Exception as e:
+        print(f"[ERROR] Browser detection failed: {e}")
+        return False
+
+
 def start_browser():
-    global browser_process, last_browser_launch_time
+    global last_browser_launch_time
 
     if not browser_launch_allowed():
+        remaining = BROWSER_REOPEN_COOLDOWN - (time.time() - last_browser_launch_time)
+        print(f"[DEBUG] Cooldown active, {remaining:.1f}s remaining.")
         return False
 
     browser_exe = find_browser_exe()
@@ -65,70 +138,43 @@ def start_browser():
         print("[ERROR] No supported browser found (Edge/Chrome).")
         return False
 
-    browser_name = os.path.basename(browser_exe).lower()
-
-    if "msedge.exe" in browser_name:
-        args = [
-            browser_exe,
-            "--inprivate",
-            "--new-window",
-            APP_URL,
-        ]
-    else:
-        args = [
-            browser_exe,
-            "--incognito",
-            "--new-window",
-            APP_URL,
-        ]
+    BROWSER_PROFILE_DIR.mkdir(parents=True, exist_ok=True)
+    args = build_browser_args(browser_exe)
 
     try:
         print(f"[INFO] Opening browser: {args}")
-        browser_process = subprocess.Popen(args, cwd=str(BASE_DIR))
+        subprocess.Popen(args, cwd=str(BASE_DIR))
         last_browser_launch_time = time.time()
         return True
     except Exception as e:
         print(f"[ERROR] Failed to open browser: {e}")
-        browser_process = None
         return False
 
 
 def ensure_browser():
-    global browser_process
+    server_up = is_server_up()
+    browser_running = is_target_browser_running()
 
-    if browser_process is None or browser_process.poll() is not None:
-        if browser_process is not None and browser_process.poll() is not None:
-            print("[WARN] Browser closed. Reopening...")
-        return start_browser()
+    print(f"[DEBUG] server_up={server_up}, browser_running={browser_running}")
 
-    return True
+    if not server_up:
+        print(f"[INFO] Launcher monitoring {APP_URL}")
+        return False
 
+    if browser_running:
+        return True
 
-def stop_process(proc, name):
-    if proc is None or proc.poll() is not None:
-        return
-
-    try:
-        print(f"[INFO] Stopping {name} (pid={proc.pid})")
-        proc.terminate()
-        proc.wait(timeout=5)
-    except Exception:
-        try:
-            proc.kill()
-        except Exception:
-            pass
+    print("[INFO] Browser closed. Reopening...")
+    return start_browser()
 
 
 def shutdown(signum=None, frame=None):
     global running
-
     if not running:
         return
 
     print("[INFO] Launcher shutting down...")
     running = False
-
-    stop_process(browser_process, "browser")
     remove_pid()
     sys.exit(0)
 
@@ -141,7 +187,10 @@ def main():
     if hasattr(signal, "SIGBREAK"):
         signal.signal(signal.SIGBREAK, shutdown)
 
-    print("[INFO] Browser launcher started")
+    print(f"[INFO] Launcher monitoring {APP_URL}")
+    print(f"[INFO] BASE_DIR={BASE_DIR}")
+    print(f"[INFO] BROWSER_PROFILE_DIR={BROWSER_PROFILE_DIR}")
+
     ensure_browser()
 
     while running:

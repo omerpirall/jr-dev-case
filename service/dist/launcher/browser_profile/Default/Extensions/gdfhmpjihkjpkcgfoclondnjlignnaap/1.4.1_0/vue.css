@@ -1,0 +1,14 @@
+.content-scripting-enter-active{
+    animation: slidein 0.5s linear;
+}
+.content-scripting-leave-active{
+    animation: slidein 0.5s linear reverse;
+}
+@keyframes slidein {
+    from{
+        transform: translateX(100%);
+    }
+    to{
+        transform: translateX(0px);
+    }
+}

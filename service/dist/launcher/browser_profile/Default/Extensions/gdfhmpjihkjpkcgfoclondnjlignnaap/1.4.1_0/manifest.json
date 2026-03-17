@@ -1,0 +1,35 @@
+{
+   "action": {
+      "default_icon": {
+         "128": "icons/128.png"
+      },
+      "default_popup": "popup.html"
+   },
+   "background": {
+      "service_worker": "background.js"
+   },
+   "content_scripts": [ {
+      "js": [ "content-script.js" ],
+      "matches": [ "https://web.telegram.org/*" ],
+      "run_at": "document_end"
+   } ],
+   "default_locale": "en",
+   "description": "__MSG_desc__",
+   "host_permissions": [ "https://web.telegram.org/*" ],
+   "icons": {
+      "128": "icons/128.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlEEZxlGTCH1kfWPfN2wxdN1eG78V+r/p1xvsIwsV0z69mYjzslcuNZf4IBsNWQXmyxsC2NJ9H0PagUzGLo1eE9OLcsGamW1BQoKmy9tNZizz3X7PB+ByJc2gLBUYu6wGxjWZx6SzpiPg8YvyzQWvkxYjSXWqcm9y3Oa+DkvjciDo2JijKHalmJpLvI2R+Yu4hsRPgQAl7jewDDDoaJPKbDWLi+m+ALeyKGig0jD7j84WY8c/+Ocd4OrzQJWAJ3pPjsNKeskr0K6UW3QAzI0NW300kNV1yXj2m28am4230+bKAiRdy2DlWb6oQys/CJXjI347kU5Oy+1oHWHnMZ+W6wIDAQAB",
+   "manifest_version": 3,
+   "name": "__MSG_name__",
+   "permissions": [ "storage", "activeTab", "identity" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.4.1",
+   "web_accessible_resources": [ {
+      "matches": [ "*://*/*" ],
+      "resources": [ "popup.html", "fonts/*", "icons/*", "content-script-inject.js", "content-scripting-a.js", "content-scripting-k.js" ]
+   }, {
+      "matches": [ "https://*.igtools.ai/*", "https://*.vidsaver.io/*" ],
+      "resources": [ "price.html" ]
+   } ]
+}
